@@ -95,7 +95,7 @@ const keyboardLayout = [
       {
         code: 'Tab',
         func: true,
-        lang: { en: '↹ Tab', ru: '↹ Tab' },
+        lang: { en: 'Tab', ru: 'Tab' },
         width: 'extra-wide',
       },
       {
@@ -261,7 +261,7 @@ const keyboardLayout = [
       {
         code: 'ShiftLeft',
         func: true,
-        lang: { en: 'Shift', ru: 'Shift' },
+        lang: { en: '⇧ Shift', ru: '⇧ Shift' },
         width: 'extra-wide',
       },
       {
@@ -388,30 +388,34 @@ const keyboardLayout = [
       },
     ],
   ];
+
+  const objectWithKeyboardKyes = {};
+  const creatKeyboardFragment = document.createDocumentFragment();
+
+  keyboardLayout.forEach(line => {
+    const keyboardLine = document.createElement('div');
+    keyboardLine.classList.add('keyboard-line');
+
+    line.forEach(key => {
+      objectWithKeyboardKyes[key.code] = key.lang;
+      objectWithKeyboardKyes[key.code].func = key.func;
+
+      const button = document.createElement('button');
+      button.setAttribute('id', key.code);
+      button.setAttribute('type', 'button');
+      button.classList.add('keyboard-key', `keyboard-key-${key.width}`);
+
+      keyboardLine.appendChild(button);
+
+
+    })
+
+    creatKeyboardFragment.appendChild(keyboardLine);
+
+  })
+
+
   
-  const keyboardKeys = {};
-  const keyboardFragment = document.createDocumentFragment();
-  
-  keyboardLayout.forEach((line) => {
-    const keyboardRow = document.createElement('div');
-    keyboardRow.classList.add('keyboard__row');
-  
-    line.forEach((key) => {
-      keyboardKeys[key.code] = key.lang;
-      keyboardKeys[key.code].func = key.func;
-  
-      const keyElement = document.createElement('button');
-      keyElement.setAttribute('id', key.code);
-      keyElement.setAttribute('type', 'button');
-      keyElement.classList.add('keyboard__key');
-      keyElement.classList.add(`keyboard__key_${key.width}`);
-  
-      keyElement.textContent = key.lang.en;
-      keyboardRow.appendChild(keyElement);
-    });
-  
-    keyboardFragment.appendChild(keyboardRow);
-  });
-  
-  export { keyboardFragment, keyboardKeys };
+ 
+  export { creatKeyboardFragment, objectWithKeyboardKyes };
   
