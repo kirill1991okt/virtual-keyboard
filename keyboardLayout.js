@@ -81,13 +81,13 @@ const keyboardLayout = [
       {
         code: 'Backspace',
         func: true,
-        lang: { en: '⌫ Back', ru: '⌫ Back' },
+        lang: { en: 'Back', ru: 'Back' },
         width: 'wide',
       },
       {
         code: 'Delete',
         func: true,
-        lang: { en: 'Del ⌦', ru: 'Del ⌦' },
+        lang: { en: 'Del', ru: 'Del' },
         width: 'wide',
       },
     ],
@@ -261,7 +261,7 @@ const keyboardLayout = [
       {
         code: 'ShiftLeft',
         func: true,
-        lang: { en: '⇧ Shift', ru: '⇧ Shift' },
+        lang: { en: 'Shift', ru: 'Shift' },
         width: 'extra-wide',
       },
       {
@@ -404,6 +404,7 @@ const keyboardLayout = [
       button.setAttribute('id', key.code);
       button.setAttribute('type', 'button');
       button.classList.add('keyboard-key', `keyboard-key-${key.width}`);
+      button.innerText = key.lang.en;
 
       keyboardLine.appendChild(button);
 
