@@ -132,7 +132,6 @@ class Keyboard {
     })
   }
 
-              //false
   switchCaps(shiftKey){
     const showUpperCase = (this.caps && !shiftKey) || (!this.caps && shiftKey);
     
