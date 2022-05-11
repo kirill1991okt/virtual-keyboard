@@ -45,6 +45,12 @@ class Keyboard {
 
   callListeners(){
 
+    this.text.addEventListener('blur', () => {
+      setTimeout(()=>{
+        this.text.focus();
+      },0);
+    })
+
     document.addEventListener('keydown', (e) =>{
       e.stopImmediatePropagation();
       console.log(e);
@@ -130,6 +136,26 @@ class Keyboard {
         }
       }
     })
+
+    this.container.addEventListener('click', (e) => {
+      this.text.focus();
+      const eventKeyDown = new KeyboardEvent('keydown', {
+        bubbles: true,
+        cancelable: true,
+        code: e.target.id,
+        view: window,
+      });
+      document.dispatchEvent(eventKeyDown);
+
+      this.text.focus();
+      const eventKeyUp = new KeyboardEvent('keyup', {
+        bubbles: true,
+        cancelable: true,
+        code: e.target.id,
+        view: window,
+      });
+      document.dispatchEvent(eventKeyUp);
+    });
   }
 
   switchCaps(shiftKey){
