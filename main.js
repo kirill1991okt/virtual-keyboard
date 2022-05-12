@@ -49,9 +49,9 @@ class Keyboard {
 
     document.addEventListener('keydown', (e) => {
       e.stopImmediatePropagation();
-      // console.log(e);
 
-      const key = document.querySelector(`#${e.code}`);
+      // const key1 = document.querySelector(`#${e.code}`);
+      const key = document.getElementById(e.code);
 
       if (!key) {
         e.preventDefault();
@@ -111,7 +111,9 @@ class Keyboard {
 
     document.addEventListener('keyup', (e) => {
       e.stopImmediatePropagation();
-      const key = document.querySelector(`#${e.code}`);
+
+      // const key = document.querySelector(`#${e.code}`);
+      const key = document.getElementById(e.code);
 
       if (!key) {
         e.preventDefault();
