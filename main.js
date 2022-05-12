@@ -32,6 +32,7 @@ class Keyboard {
 
     textarea.autofocus = true;
     container.appendChild(creatKeyboardFragment);
+    this.switchLang(this.lang);
 
     document.body.appendChild(wrapper);
     wrapper.appendChild(title);
@@ -39,8 +40,10 @@ class Keyboard {
     wrapper.appendChild(instruction);
     wrapper.appendChild(textarea);
     wrapper.appendChild(container);
+   
     
     this.callListeners();
+    
   }
 
   callListeners(){
@@ -53,7 +56,7 @@ class Keyboard {
 
     document.addEventListener('keydown', (e) =>{
       e.stopImmediatePropagation();
-      console.log(e);
+      // console.log(e);
       
       const key = document.querySelector(`#${e.code}`);
 
@@ -83,28 +86,28 @@ class Keyboard {
         } else if (e.key === 'Shift' && !e.repeat){
           e.preventDefault();
           this.switchCaps(e.shiftKey);
-        } else if (e.code === 'Tab' && !e.repet){
+        } else if (e.code === 'Tab'){
           e.preventDefault();
           this.putText('\t');
-        } else if (e.code === 'Enter' && !e.repet){
+        } else if (e.code === 'Enter'){
           e.preventDefault();
           this.putText('\n');
-        } else if (e.code === 'Backspace' && !e.repet){
+        } else if (e.code === 'Backspace'){
           e.preventDefault();
           this.pressBackspace();
         } else if (e.code === 'Delete' && !e.repet){
           e.preventDefault();
           this.pressDelete();
-        } else if (e.code === 'ArrowUp' && !e.repet){
+        } else if (e.code === 'ArrowUp' && !e.isTrusted){
           e.preventDefault();
           this.arrowUp();
-        } else if (e.code === 'ArrowDown' && !e.repet){
+        } else if (e.code === 'ArrowDown' && !e.isTrusted){
           e.preventDefault();
           this.arrowDown();
-        } else if (e.code === 'ArrowLeft' && !e.repet){
+        } else if (e.code === 'ArrowLeft' && !e.isTrusted){
           e.preventDefault();
           this.arrowLeft();
-        } else if (e.code === 'ArrowRight' && !e.repet){
+        } else if (e.code === 'ArrowRight' && !e.isTrusted){
           e.preventDefault();
           this.arrowRight();
         } else if (!objectWithKeyboardKyes[e.code].func){
@@ -185,6 +188,36 @@ class Keyboard {
           e.textContent = shiftKey ? '>' : '.';
         } else if (e.id === 'Slash' && this.lang === 'en') {
           e.textContent = shiftKey ? '?' : '/';
+        } else if (e.id === 'Digit1' && (this.lang === 'en' || this.lang === 'ru')) {
+          e.textContent = shiftKey ? '!' : '1';
+        } else if (e.id === 'Digit2' && this.lang === 'en') {
+          e.textContent = shiftKey ? '@' : '2';
+        } else if (e.id === 'Digit2' && this.lang === 'ru') {
+          e.textContent = shiftKey ? '"' : '2';
+        } else if (e.id === 'Digit3' && this.lang === 'en') {
+          e.textContent = shiftKey ? '#' : '3';
+        } else if (e.id === 'Digit3' && this.lang === 'ru') {
+          e.textContent = shiftKey ? '№' : '3';
+        } else if (e.id === 'Digit4' && this.lang === 'en') {
+          e.textContent = shiftKey ? '$' : '4';
+        } else if (e.id === 'Digit4' && this.lang === 'ru') {
+          e.textContent = shiftKey ? ';' : '4';
+        } else if (e.id === 'Digit5' && (this.lang === 'en' || this.lang === 'ru')) {
+          e.textContent = shiftKey ? '%' : '5';
+        } else if (e.id === 'Digit6' && this.lang === 'en') {
+          e.textContent = shiftKey ? '^' : '6';
+        } else if (e.id === 'Digit6' && this.lang === 'ru') {
+          e.textContent = shiftKey ? ':' : '6';
+        } else if (e.id === 'Digit7' && this.lang === 'en') {
+          e.textContent = shiftKey ? '&' : '7';
+        } else if (e.id === 'Digit7' && this.lang === 'ru') {
+          e.textContent = shiftKey ? '?' : '7';
+        } else if (e.id === 'Digit8' && (this.lang === 'en' || this.lang === 'ru')) {
+          e.textContent = shiftKey ? '*' : '8';
+        } else if (e.id === 'Digit9' && (this.lang === 'en' || this.lang === 'ru')) {
+          e.textContent = shiftKey ? '(' : '9';
+        } else if (e.id === 'Digit0' && (this.lang === 'en' || this.lang === 'ru')) {
+          e.textContent = shiftKey ? ')' : '0';
         } else if (e.id === 'Slash' && this.lang === 'ru') {
           e.textContent = shiftKey ? ',' : '.';
         } else {
@@ -212,20 +245,27 @@ putText(char){
   let text = this.text,
   start = text.selectionStart,
   end = text.selectionEnd;
+  const cursorAt = start;
+  console.log(cursorAt);
 
-  text.value = text.value.slice(0, start) + char + text.value.slice(end);
+  text.value = text.value.slice(0, cursorAt) + char + text.value.slice(end);
 
-  start = start + char.length;
-  end = start; 
+  this.text.selectionStart = cursorAt + char.length;
+  this.text.selectionEnd = this.text.selectionStart; 
 }
 
 pressBackspace(){
   if (this.text.selectionStart !== this.text.selectionEnd) {
     this.putText('');
   } else {
-    this.text.value = this.text.value.slice(0, this.text.selectionStart - 1) + this.text.value.slice(this.text.selectionEnd);
+    const cursorAt = Math.max(0, this.text.selectionStart - 1);
+    
+    this.text.value = this.text.value.slice(0, cursorAt) + this.text.value.slice(this.text.selectionEnd);
 
-    this.text.selectionStart = this.text.selectionStart;
+    console.log(cursorAt);
+    console.log(this.text.selectionStart);
+
+    this.text.selectionStart = cursorAt;
     this.text.selectionEnd = this.text.selectionStart;
 
   }
